@@ -3,9 +3,8 @@ package repositories;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.TreeSet;
 
 import entities.Usuario;
 import validators.ValidadorUsuario;
@@ -18,13 +17,13 @@ import validators.ValidadorUsuario;
 
 public class UsuarioRepository {
 
-	private Map<String, Usuario> estudantes;
+	private TreeSet<Usuario> estudantes;
 	
 	/**
      * Cria um novo repositório de usuários.
      */
 	public UsuarioRepository() {
-		this.estudantes = new HashMap<>();
+		this.estudantes = new TreeSet<>();
 	}
 	
 	/**
@@ -35,13 +34,13 @@ public class UsuarioRepository {
      * @return true se o estudante foi adicionado com sucesso, false se já existe um estudante com o mesmo CPF
      * @throws NullPointerException se o estudante for nulo
      */
-	public boolean adicionaEstudante(String cpf, Usuario estudante) {
+	public boolean adicionaEstudante(Usuario estudante) {
 		ValidadorUsuario.validaUsuario(estudante);
 		
-		if (this.estudantes.containsKey(cpf)) {
+		if (this.estudantes.contains(estudante)) {
 			return false;
 		}
-		this.estudantes.put(cpf, estudante);
+		this.estudantes.add(estudante);
 		return true;
 	}
 	
@@ -54,7 +53,7 @@ public class UsuarioRepository {
 		if (this.estudantes.size() == 0) {
 			return new String[0];
 		}
-		List<Usuario> listaOrdenadaPeloNome = new ArrayList<>(this.estudantes.values());
+		List<Usuario> listaOrdenadaPeloNome = new ArrayList<>(estudantes);
 		listaOrdenadaPeloNome.sort(null);
 		return converteParaArrayDeString(listaOrdenadaPeloNome);
 	}
@@ -68,7 +67,7 @@ public class UsuarioRepository {
 		if (this.estudantes.size() == 0) {
 			return new String[0];
 		}
-		List<Usuario> listaOrdenadaPelaBonificacao = new ArrayList<>(this.estudantes.values());
+		List<Usuario> listaOrdenadaPelaBonificacao = new ArrayList<>(estudantes);
 		listaOrdenadaPelaBonificacao.sort(Comparator.comparing(Usuario::getBonificacao).reversed());
 		return converteParaArrayDeString(listaOrdenadaPelaBonificacao);
 	}
@@ -83,10 +82,12 @@ public class UsuarioRepository {
      * @throws IllegalArgumentException se as credenciais forem inválidas
      */
 	public Usuario buscaEstudante(String cpf, String senha) {
-		Usuario estudanteProcurado = this.estudantes.get(cpf);
-		ValidadorUsuario.validaUsuario(estudanteProcurado);
-		if (validaSenha(estudanteProcurado, senha)) {
-			return estudanteProcurado;
+		for (Usuario u : estudantes)
+			if (u.getCpf().equals(cpf)) {
+					ValidadorUsuario.validaUsuario(u);
+					if (validaSenha(u, senha)) {
+							return u;
+				}
 		}
 		
 		throw new IllegalArgumentException("Usuário ou senha inválidos");

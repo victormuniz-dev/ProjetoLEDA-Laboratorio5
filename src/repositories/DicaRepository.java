@@ -1,8 +1,7 @@
 package repositories;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.Iterator;
+import java.util.TreeSet;
 import entities.Dica;
 import validators.ValidadorDica;
 
@@ -13,13 +12,13 @@ import validators.ValidadorDica;
 
 public class DicaRepository {
 
-	private List<Dica> dicas;
+	private TreeSet<Dica> dicas;
 	
 	/**
      * Cria um novo repositório de dicas.
      */
 	public DicaRepository() {
-		this.dicas = new ArrayList<>();
+		this.dicas = new TreeSet<>();
 	}
 	
 	/**
@@ -99,6 +98,11 @@ public class DicaRepository {
      */
 	public Dica buscaDica(int posicao) {
 		ValidadorDica.validaPosicao(posicao, this.dicas.size());
-		return this.dicas.get(posicao - 1);
+		Iterator<Dica> iterator = dicas.iterator();
+		int i = 0;
+		while (i > posicao) {
+			if (i == posicao) return iterator.next();
+		}
+		return null;
 	}
 }
