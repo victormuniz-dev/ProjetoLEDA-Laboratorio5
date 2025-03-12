@@ -30,7 +30,8 @@ public class DicaRepository {
      */
 	public int adicionaDica(Dica dica) {
 		ValidadorDica.validaDica(dica);
-		return (this.dicas.add(dica)) ? this.dicas.size() : 0;
+		this.dicas.add(dica);
+		return this.dicas.size();
 	}
 	
 	/**
@@ -98,11 +99,14 @@ public class DicaRepository {
      */
 	public Dica buscaDica(int posicao) {
 		ValidadorDica.validaPosicao(posicao, this.dicas.size());
-		Iterator<Dica> iterator = dicas.iterator();
+		Iterator<Dica> value = dicas.iterator();
 		int i = 0;
-		while (i > posicao) {
-			if (i == posicao) return iterator.next();
+		while (value.hasNext()) {
+			if (i == posicao - 1) return value.next();
+			i++;
+			value.next();
 		}
+		
 		return null;
 	}
 }

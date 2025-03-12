@@ -263,7 +263,7 @@ public class Usuario implements Comparable<Usuario> {
 	 */
 	@Override
 	public String toString() {
-		return "Nome: " + this.nome + ", matrícula " + this.matricula;
+		return "Nome: " + this.nome + ", matrícula: " + this.matricula;
 	}
 	
 	/**

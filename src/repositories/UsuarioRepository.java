@@ -37,9 +37,8 @@ public class UsuarioRepository {
 	public boolean adicionaEstudante(Usuario estudante) {
 		ValidadorUsuario.validaUsuario(estudante);
 		
-		if (this.estudantes.contains(estudante)) {
-			return false;
-		}
+		if (this.estudantes.contains(estudante)) return false;
+		
 		this.estudantes.add(estudante);
 		return true;
 	}

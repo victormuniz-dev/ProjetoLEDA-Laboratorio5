@@ -14,7 +14,7 @@ import validators.ValidadorUsuario;
  * @author Alana Vanessa Pimentel Toldo de Andrade, matrícula 123210882
  */
 
-public class Dica {
+public class Dica implements Comparable<Dica> {
 
 	private Usuario autor;
 	private TipoAtividadeComplementar tema;
@@ -126,4 +126,13 @@ public class Dica {
 	private void bonificaAutor(int bonificacao) {
 		this.autor.recebeBonificacao(bonificacao);
 	}
+
+	@Override
+	public int compareTo(Dica obj) {
+		if (this.autor.equals(obj.autor) && this.tema.equals(obj.tema)) return 0; 
+		else if (this.autor.equals(obj.autor)) return 1;
+		return this.autor.compareTo(obj.autor);
+	}
+	
+	
 }
